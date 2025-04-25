@@ -83,3 +83,6 @@ def calculate_distance(request):
 
 def round(request):
     return render(request,'round.html')
+
+def login(request):
+    return render(request,'login.html')

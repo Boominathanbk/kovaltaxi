@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -223,4 +223,346 @@ function initializeAutocomplete() {
 
 
 
- -->
+ --> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Jaro:opsz@6..72&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2FasXIMLUeQ9VpKDbbpaei9SEhozy0R0&libraries=places"></script> -->
+
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&libraries=places&callback=initAutocomplete" async defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    
+    <title>Document</title>
+</head>
+<style>
+    .nav-link.nav-link:hover{
+        color: orangered;
+    }
+    .trip a:hover{
+      font-weight: bold;
+      text-decoration: underline;
+      font-size: large;
+      color: #c90505;
+
+    }
+    .car img {
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.car img:hover {
+    transform: scale(1.1); /* Enlarges the image slightly */
+    filter: brightness(1.2); /* Makes the image slightly brighter */
+    color: aliceblue;
+}
+
+.car p:hover {
+   
+    font-size: larger;
+    color: #0c0c0c;
+}
+.car-link {
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.car-link:active {
+    background-color: #c90505; /* Background color on click */
+    color: white; /* Optional: Change text color */
+}
+
+#pickupsuggestions, #dropsuggestions {
+      /* border: 1px solid #ccc; */
+      max-width: 200px;
+      overflow-y: auto;
+      background-color: white;
+      position: absolute;
+      width: 100%;  /* Match the width of the input box */
+      z-index: 10;
+    }
+
+    /* Style for each suggestion item */
+    #pickupsuggestions div, #dropsuggestions div {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    /* Hover effect on suggestion items */
+    #pickupsuggestions div:hover, #dropsuggestions div:hover {
+      background-color: #f0f0f0;
+    }
+
+    /* Prevents input box overlap with suggestion box */
+    .input-container {
+      position: relative;
+      /* width: 300px;  */
+      /* margin-bottom: 20px; */
+    }
+</style>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <a class="navbar-brand fs-5" style="color: rgb(255, 136, 0); font-family: Audiowide;" href="#"><img class="img-fluid bg-none" style="width: 100px; border-radius: 50%;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIEBmVar2aJfNDM6NOcVd_sTeFEMt2u8_Y4Q&s" alt=""> Koval-Taxi</a>
+         
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse " id="navbarNav">
+            <ul class="navbar-nav mx-auto me-5 fs-5" style="font-family: Faculty;">
+               
+              <li class="nav-item" style="margin-right: 150px;">
+                <a aria-label="Chat on WhatsApp" class="nav-link active text-decoration-none fs-5 " style="color: orangered;" href="https://wa.me/7373581581"> <i class="fa-brands fa-whatsapp fa-lg" style="color: #3bdb0f;"> </i> 7373581581</a>
+              </li>
+              <li class="nav-item" style="margin-right: 50px;">
+                <a aria-label="Chat on WhatsApp" class="nav-link active text-decoration-none fs-5 d-sm-none d-md-block" style="color: orangered;" href="tel:+7373581581"> <i class="fa-solid fa-phone" style="color: #2ee60a;"></i> 7373581581</a>
+              </li>
+              <li class="nav-item me-3">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item me-3">
+                <a class="nav-link active" href="">About</a>
+              </li>
+              <li class="nav-item me-3">
+                <a class="nav-link active" href="">Service</a>
+              </li>
+              <li class="nav-item me-3">
+                <a class="nav-link active" href="#">Register</a>
+              </li>
+              <li class="nav-item me-3">
+                <a class="nav-link active" href="{% url 'login' %}">Login</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <marquee behavior="left" direction="" style="color: orangered;">Taxi Booking...</marquee>
+      <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="https://png.pngtree.com/thumb_back/fh260/background/20231006/pngtree-taxi-cab-with-vibrant-3d-rendered-yellow-taxi-sign-image_13509776.png" class="d-block w-100" style="height: 500px;" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>First slide label</h5>
+                <p>Some representative placeholder content for the first slide.</p>
+              </div>
+          </div>
+          <div class="carousel-item">
+            <img src="https://t3.ftcdn.net/jpg/04/32/29/64/360_F_432296462_0rRBBm2f4u22BFa7tvls5d04AApxL8IC.jpg" class="d-block w-100" style="height: 500px;" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="https://4.imimg.com/data4/DW/VI/IMOB-7818118/taxi_png16-png-500x500.png" class="d-block w-100" style="height: 500px;" alt="...">
+            
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+ 
+      <h1 class="text-center" style="font-family: fantasy;">Booking</h1>
+      <div class="container p-5 bg-opacity-75 rounded" style="background-image: linear-gradient(red,yellow);">
+       
+        <div class="trip text-center" >
+        <a  class="text-light fs-5 mx-auto me-3 fw-bold " href="" >Drop Trip</a>
+        <a  href="{% url 'round' %}" class="text-decoration-none text-light fs-5 mx-auto me-3 "> Round Trip</a>
+        <a  href="" class="text-decoration-none text-light fs-5 mx-auto me-3">Packages</a>
+      </div> <br><br>
+      <form action="{% url 'calculate_distance' %}" method="POST">
+            {% csrf_token %}
+            
+            <div class="text-center" style="display: block;place-items: center;">
+
+              <div class="d-flex">
+                <div class="d-flex align-items-center px-2">
+                  <i class="fa-solid fa-location-dot fa-xl px-2" style="color: #21ea06;"></i>
+                  <div class="input-container">
+                    <input type="text" id="pickup" class="rounded" name="pickup" placeholder="Pickup Location" required oninput="showSuggestions(this)">
+                    <div id="pickupsuggestions"></div>
+                  </div>
+                </div>
+  
+                <div class="d-flex align-items-center">
+                  <i class="fa-solid fa-location-dot fa-xl px-2" style="color: #c90505;"></i>
+                  <div class="input-container">
+                    <input type="text" id="drop" class="rounded" name="drop" placeholder="Drop Location" required oninput="showSuggestions(this)">
+                    <div id="dropsuggestions"></div>
+                  </div>
+                </div>
+              </div><br>
+              <div class="row text-center">
+                <div class="col-md-4 car">
+                    <a href="" class="text-decoration-none text-dark car-link">
+                        <img src="https://www.droptaxi.in/assets/images/sedan_black.png" alt="" class="rounded">
+                        <p class="px-4"><small class="px-2 fs-5">Sedan</small><br> ₹ 14/km</p>
+                    </a>
+                </div>
+                <div class="col-md-4 car p-3">
+                    <a href="#" class="text-decoration-none text-dark car-link">
+                        <img src="https://www.droptaxi.in/assets/images/suv_black.png" alt="" class="rounded">
+                        <p class="px-4"><small class=" fs-5">MUV-Xylo</small><br> ₹ 18/km</p>
+                    </a>
+                </div>
+                <div class="col-md-4 car p-3">
+                    <a href="#" class="text-decoration-none text-dark car-link">
+                        <img src="https://www.droptaxi.in/assets/images/suv_black.png" alt="" class="rounded">
+                        <p class="px-4"><small class=" fs-5">MUV-Xylo</small><br> ₹ 18/km</p>
+                    </a>
+                </div>
+              </div>
+
+            </div>
+            <div class="result text-center">
+              <button class="btn btn-success" onclick="getDistance()">Calculate Distance</button>
+              <p>The distance between the locations is: <strong></strong><div id="distance"></div></strong></p>
+
+          </div><br>
+            <br>
+            <div class="text-center ">
+              <i class="fa-solid fa-user fa-xl" style="color: #0910ec;"></i> <input type="text" class="rounded" name="name" placeholder="Enter Name" required>
+              <i class="fa-solid fa-phone fa-xl" style="color: #56df0c;"></i> <input type="text" class="rounded" name="phone" placeholder="Mobile Number" required><br>
+            </div><br>
+            <div class="text-center">
+              <i class="fa-solid fa-envelope fa-xl" style="color: #f10404;"></i> <input type="text"  class="rounded" name="email" placeholder="Email" required>
+              <i class="fa-regular fa-calendar-days fa-xl" style="color: #c706ad;"></i> <input type="date" class="rounded px-4" name="date" placeholder="Pickup Date" required>
+            </div><br>
+           
+         
+        
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary text-center text-light px-4">Book</button>
+          </div>
+      </form>
+
+        
+    </div><br><br>
+    <footer style="background-color: #212529; color: white;">
+      <p class="text-center" style="width: 100%; height: 80px;">2024 &copy; Koval-Taxi. All Rights Reserved.</p>
+  </footer>
+    
+
+  <script>
+    // Function to handle input and show location suggestions
+    function showSuggestions(inputField) {
+      
+      const query = inputField.value;
+
+      if (query.length < 3) {
+        document.getElementById('pickupsuggestions').innerHTML = '';  // Clear suggestions if the query is too short
+        document.getElementById('dropsuggestions').innerHTML = '';  // Clear suggestions if the query is too short
+        return;
+      }
+
+      getLocationSuggestions(query, (data) => {
+        const suggestionsContainer = document.getElementById(inputField.id+'suggestions');
+        suggestionsContainer.innerHTML = '';  // Clear previous suggestions
+        
+        if(data.length) {
+          data.forEach(item => {
+            const suggestion = document.createElement('div');
+            suggestion.textContent = item.display_name;
+            suggestion.onclick = () => selectSuggestion(item, inputField);
+            suggestionsContainer.appendChild(suggestion);
+          });
+        }
+      });
+    }
+
+    // Function to get location suggestions from Nominatim API
+    function getLocationSuggestions(query, callback) {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=5`;
+        // const url = `https://us1.locationiq.com/v1/search.php?key=AIzaSyC2FasXIMLUeQ9VpKDbbpaei9SEhozy0R0&q=${encodeURIComponent(query)}&format=json&limit=5`;
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          callback(data);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    // Function to populate the input field with the selected suggestion
+    function selectSuggestion(item, inputField) {
+      inputField.value = item.display_name;  // Set the selected address in the input field
+      document.getElementById('pickupsuggestions').innerHTML = '';  // Clear suggestions
+      document.getElementById('dropsuggestions').innerHTML = '';  // Clear suggestions
+    }
+
+    // Function to calculate the distance using Haversine formula
+    function getDistance() {
+      const pickupLocation = document.getElementById('pickup').value;
+      const dropLocation = document.getElementById('drop').value;
+
+      // Get pickup and drop location coordinates using Nominatim API
+      Promise.all([
+        getLocationCoordinates(pickupLocation),
+        getLocationCoordinates(dropLocation)
+      ])
+      .then(results => {
+        const pickupCoords = results[0];
+        const dropCoords = results[1];
+
+        if (pickupCoords && dropCoords) {
+          // Calculate the distance between the two coordinates using Haversine formula
+          const distance = haversine(pickupCoords.lat, pickupCoords.lon, dropCoords.lat, dropCoords.lon);
+          document.getElementById('distance').innerText = `Distance: ${distance.toFixed(2)} km`;
+        } else {
+          document.getElementById('distance').innerText = 'Invalid locations entered.';
+        }
+      })
+      .catch(error => {
+        console.error('Error calculating distance:', error);
+        document.getElementById('distance').innerText = 'Error calculating distance.';
+      });
+    }
+
+    // Function to get the coordinates (latitude and longitude) of a location using Nominatim
+    function getLocationCoordinates(location) {
+      return new Promise((resolve, reject) => {
+        getLocationSuggestions(location, (data) => {
+          if (data && data.length > 0) {
+            const { lat, lon } = data[0];
+            resolve({ lat: parseFloat(lat), lon: parseFloat(lon) });
+          } else {
+            resolve(null);  // If no data found, return null
+          }
+        });
+      });
+    }
+
+    // Haversine formula to calculate the distance between two lat/lon points in km
+    function haversine(lat1, lon1, lat2, lon2) {
+      const R = 6371; // Radius of the Earth in km
+      const φ1 = Math.radians(lat1);
+      const φ2 = Math.radians(lat2);
+      const Δφ = Math.radians(lat2 - lat1);
+      const Δλ = Math.radians(lon2 - lon1);
+
+      const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+                Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      
+      return R * c; // Distance in km
+    }
+
+    // Convert degrees to radians
+    Math.radians = function(degrees) {
+      return degrees * Math.PI / 140;
+    }
+  </script>
+
+
+</body>
+</html>

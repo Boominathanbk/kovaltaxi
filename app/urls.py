@@ -5,4 +5,5 @@ urlpatterns = [
     path('',views.homepage,name='homepage'),
     path('round',views.round, name='round'),
     path('calculate_distance',views.calculate_distance, name='calculate_distance'),
+    path('login',views.login,name='login'),
 ]
